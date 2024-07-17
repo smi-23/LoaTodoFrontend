@@ -1,8 +1,7 @@
 "use client";
 
-import axios from "axios";
 import Header from "../components/Header";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import InputBox from "../components/InputBox";
 import { backend_api } from "@/app/utils";
 
@@ -91,6 +90,7 @@ const SignupPage = () => {
     }
   };
 
+  // 회원가입버튼을 계속 눌렀을 때 더이상 checkUsername메소드가 실행되지 않아 에러 메시지가 출력되지 않고 검사도 하지 않음
   const signup = async () => {
     messageReset();
     checkPassword();
@@ -161,7 +161,7 @@ const SignupPage = () => {
             placeholder={"유저네임을 입력해주세요"}
             value={username}
             setValue={setUsername}
-            onBlur={debounce(checkUsername, 500)} // Added onBlur event
+            onBlur={debounce(checkUsername, 500)}
             message={usernameMessage}
           />
         </div>
@@ -174,7 +174,7 @@ const SignupPage = () => {
             placeholder={"비밀번호를 입력해주세요"}
             value={password}
             setValue={setPassword}
-            onBlur={debounce(checkPassword, 500)} // Added onBlur event
+            onBlur={debounce(checkPassword, 500)}
             message={passwordMessage}
           />
         </div>
@@ -187,7 +187,7 @@ const SignupPage = () => {
             placeholder={"비밀번호를 다시 입력해주세요"}
             value={passwordCheck}
             setValue={setPasswordCheck}
-            onBlur={debounce(checkPasswordCheck, 500)} // Added onBlur event
+            onBlur={debounce(checkPasswordCheck, 500)}
             message={passwordCheckMessage}
           />
         </div>
@@ -200,7 +200,7 @@ const SignupPage = () => {
             placeholder={"이름을 입력해주세요"}
             value={name}
             setValue={setName}
-            onBlur={debounce(checkName, 500)} // Added onBlur event
+            onBlur={debounce(checkName, 500)}
             message={nameMessage}
           />
         </div>
@@ -213,7 +213,7 @@ const SignupPage = () => {
             placeholder={"이메일을 입력해주세요"}
             value={email}
             setValue={setEmail}
-            onBlur={debounce(checkEmail, 500)} // Added onBlur event
+            onBlur={debounce(checkEmail, 500)}
             // onKeyUp={signup}
             message={emailMessage}
           />
