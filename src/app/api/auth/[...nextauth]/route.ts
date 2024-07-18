@@ -48,6 +48,7 @@ const authOptions: NextAuthOptions = {
       const decodedToken = jwt.decode(accessToken);
       if (decodedToken && decodedToken.exp <= Date.now() / 1000) {
         try {
+          // 재사용성을 높이는 방법을 생각해야 함 지금은 에러 때문에 임시로 사용
           const response = await axios.post(
             "http://localhost:8080/api/user/refresh-tokens",
             {},
@@ -58,7 +59,7 @@ const authOptions: NextAuthOptions = {
               },
             },
           );
-          console.log("refresh_tokens response =", response.data);
+          console.log("토큰 재발급 응답 =", response.data);
           const newAccessToken = response.headers["authorization"];
           const newRefreshToken = response.headers["refreshtoken"];
 

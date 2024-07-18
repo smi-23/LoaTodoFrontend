@@ -12,8 +12,8 @@ export const backend_api = () => {
   const instance = axios.create(defaultOptions);
 
   instance.interceptors.request.use(
-    (config) => {
-      const session = getSession();
+    async (config) => {
+      const session = await getSession();
       if (session) {
         config.headers.Authorization = session?.user?.Authorization;
         config.headers.RefreshToken = session?.user?.RefreshToken;
