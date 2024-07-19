@@ -53,12 +53,10 @@ const Header = () => {
   const token = useToken();
 
   useEffect(() => {
-    token.then((response) => {
-      if (response) {
-        setRole(response.role);
-        setUsername(response.sub);
-      }
-    });
+    if (token) {
+      setRole(token.role);
+      setUsername(token.sub);
+    }
   }, [token]);
 
   return (
@@ -138,7 +136,7 @@ const Header = () => {
                 textDecoration: "none",
               }}
             >
-              LOGO
+              LoaTodo
             </Typography>
             {/*메뉴*/}
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
@@ -156,7 +154,11 @@ const Header = () => {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                  {username ? (
+                    <span>{username}</span>
+                  ) : (
+                    <Avatar alt="Remy Sharp" src="/public/vercel.svg" />
+                  )}
                 </IconButton>
               </Tooltip>
               <Menu

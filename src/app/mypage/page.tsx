@@ -20,13 +20,11 @@ const MyPage = () => {
   const token = useToken();
 
   useEffect(() => {
-    token.then((response) => {
-      if (response) {
-        setRole(response.role);
-        setUsername(response.sub);
-        setName(response.name || ""); // response.name이 없으면 빈 문자열로 설정
-      }
-    });
+    if (token) {
+      setRole(token.role);
+      setUsername(token.sub);
+      setName(token.name || ""); // response.name이 없으면 빈 문자열로 설정
+    }
   }, [token]);
 
   const updateName = async () => {

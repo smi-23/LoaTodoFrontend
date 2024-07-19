@@ -1,5 +1,6 @@
 "use client";
 import { useSession } from "next-auth/react";
+import { useState, useEffect } from "react";
 import jwt from "jsonwebtoken";
 import { Role } from "@/types";
 
@@ -12,18 +13,27 @@ export interface Token {
   email: string;
 }
 
-// TODO: 여기 안에서 token을 state로 가지고, useEffect로 변화를 관리하도록 수정 필요
-const useToken = async (): Promise<Token | null> => {
+const useToken = (): Token | null => {
   const { data: session } = useSession();
+  const [token, setToken] = useState<Token | null>(null);
 
-  const token =
-    session?.user?.Authorization.toString().replace("Bearer ", "") ?? null;
+  useEffect(() => {
+    const fetchToken = async () => {
+      const authToken =
+        session?.user?.Authorization?.toString().replace("Bearer ", "") ?? null;
+      if (!authToken) {
+        setToken(null);
+        return;
+      }
 
-  if (!token) return null;
+      const decoded = jwt.decode(authToken) as Token;
+      setToken(decoded);
+    };
 
-  const decoded = await jwt.decode(token);
-  // console.log(decoded as Token);
-  return decoded as Token;
+    fetchToken();
+  }, [session]);
+
+  return token;
 };
 
 export default useToken;

@@ -14,11 +14,11 @@ const LoginPage = () => {
   const [error, setError] = useState("");
 
   // 메시지 리셋
-  function messageReset() {
-    setUsernameMessage("");
-    setPasswordMessage("");
-    setError("");
-  }
+  // function messageReset() {
+  //   setUsernameMessage("");
+  //   setPasswordMessage("");
+  //   setError("");
+  // }
 
   const checkUsername = () => {
     if (username === "") {
@@ -41,7 +41,7 @@ const LoginPage = () => {
       const response = await signIn("credentials", {
         username: username,
         password: password,
-        redirect: false, // 기본 리다이렉트 비활성화
+        redirect: true, // 기본 리다이렉트 비활성화
         callbackUrl: "/", // 성공적인 로그인 후의 콜백 URL 지정
       });
       console.log(response);
