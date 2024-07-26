@@ -161,7 +161,12 @@ const Header = () => {
                   {username ? (
                     <span>{username}</span>
                   ) : (
-                    <Avatar alt="Remy Sharp" src="/public/vercel.svg" />
+                    <img
+                      alt="Remy Sharp"
+                      src="/temp.webp"
+                      width={40} // 이미지 너비 설정
+                      height={40}
+                    /> // 이미지 높이 설정 />
                   )}
                 </IconButton>
               </Tooltip>
