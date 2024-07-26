@@ -71,7 +71,6 @@ const MyPage = () => {
 
   return (
     <>
-      <Header />
       <h1>Welcome {username}</h1>
       <h2>This page is Mypage</h2>
       <div>

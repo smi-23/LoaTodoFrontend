@@ -14,11 +14,13 @@ import {
   MenuItem,
 } from "@mui/material";
 import { Menu as MenuIcon, Adb as AdbIcon } from "@mui/icons-material";
+
 import { signOut } from "next-auth/react";
 import useToken from "@/app/hooks/userToken";
 import { useEffect, useState } from "react";
 import { Role } from "@/types";
 import * as React from "react";
+import SearchBox from "@/app/components/SearchBox";
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["마이페이지", "로그아웃"];
@@ -80,7 +82,7 @@ const Header = () => {
                 textDecoration: "none",
               }}
             >
-              LOGO
+              LoaTodo full size
             </Typography>
 
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -136,7 +138,7 @@ const Header = () => {
                 textDecoration: "none",
               }}
             >
-              LoaTodo
+              LoaTodo small size
             </Typography>
             {/*메뉴*/}
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
@@ -150,6 +152,8 @@ const Header = () => {
                 </Button>
               ))}
             </Box>
+            {/*검색창*/}
+            <SearchBox />
             {/*유저정보창*/}
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">

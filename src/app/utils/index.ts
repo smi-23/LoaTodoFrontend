@@ -38,3 +38,30 @@ export const backend_api = () => {
 
   return instance;
 };
+
+export const lostark_api = () => {
+  const defaultOptions = {
+    baseURL: "https://developer-lostark.game.onstove.com",
+    headers: {
+      Authorization: `bearer ${process.env.NEXT_PUBLIC_LOSTARK_CLIENT_KEY}`,
+      "Content-Type": "application/json",
+    },
+  };
+
+  const instance = axios.create(defaultOptions);
+
+  instance.interceptors.response.use(
+    (response) => {
+      // 응답 데이터를 콘솔에 출력합니다.
+      console.log(response.data, response.status);
+      return response;
+    },
+    (error) => {
+      // 오류 로그를 콘솔에 출력합니다.
+      console.log(`Error log`, error.response.data, error.response?.status);
+      return Promise.reject(error);
+    },
+  );
+
+  return instance;
+};

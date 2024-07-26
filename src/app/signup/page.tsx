@@ -149,7 +149,6 @@ const SignupPage = () => {
 
   return (
     <>
-      <Header />
       <h1>Signup</h1>
       <div>
         <div>

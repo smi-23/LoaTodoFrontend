@@ -65,7 +65,6 @@ const LoginPage = () => {
   }
   return (
     <>
-      <Header />
       <h1>Login</h1>
       <div>
         <div>
