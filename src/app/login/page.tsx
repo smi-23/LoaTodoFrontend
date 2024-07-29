@@ -1,10 +1,10 @@
 "use client";
 
-import Header from "../components/Header";
 import React, { useState } from "react";
 import InputBox from "../components/InputBox";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import SocialLoginButton from "@/app/components/SocialLoginButton";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -103,6 +103,9 @@ const LoginPage = () => {
           >
             아직 회원이 아니신가요? <strong>회원가입</strong>
           </Link>
+        </div>
+        <div>
+          <SocialLoginButton />
         </div>
         {error && <p style={{ color: "red" }}>{error}</p>}
       </div>

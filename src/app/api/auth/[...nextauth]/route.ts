@@ -5,50 +5,78 @@ import jwt from "jsonwebtoken";
 import { signOut } from "next-auth/react";
 import axios from "axios";
 
+// 기존 아이디 비밀번호 입력 로그인
+const defaultLoginProvider = CredentialsProvider({
+  name: "Credentials",
+  credentials: {
+    username: { label: "Username", type: "text" },
+    password: { label: "Password", type: "password" },
+  },
+  authorize: async (credentials) => {
+    try {
+      const response = await backend_api().post("/api/user/login", {
+        username: credentials.username,
+        password: credentials.password,
+      });
+      const user = response.data;
+      if (user) {
+        user.Authorization = response.headers.authorization;
+        user.RefreshToken = response.headers.refreshtoken;
+        return user;
+      } else {
+        console.error("로그인 중 오류 발생:");
+        return null;
+      }
+    } catch (error) {
+      console.error("로그인 중 오류 발생:", error);
+      return null;
+    }
+  },
+});
+
+// 소셜 로그인
+const socialLoginProvider = CredentialsProvider({
+  id: "social-login",
+  name: "Social-login",
+  credentials: {
+    accessToken: { label: "Access Token", type: "text" },
+    refreshToken: { label: "Refresh Token", type: "text" },
+  },
+  authorize: async (credentials) => {
+    // 서버에서 토큰을 검증하거나, 필요한 처리를 추가할 수 있습니다.
+    const user = {
+      id: "exampleUserId",
+      Authorization: credentials.accessToken,
+      RefreshToken: credentials.refreshToken,
+    };
+    if (user) {
+      return user;
+    } else {
+      console.error("소셜 로그인 중 오류 발생:");
+      return null;
+    }
+  },
+});
+
 const authOptions: NextAuthOptions = {
-  providers: [
-    CredentialsProvider({
-      name: "Credentials",
-      credentials: {
-        username: { label: "Username", type: "text" },
-        password: { label: "Password", type: "password" },
-      },
-      authorize: async (credentials) => {
-        try {
-          const response = await backend_api().post("/api/user/login", {
-            username: credentials.username,
-            password: credentials.password,
-          });
-          const user = response.data;
-          if (user) {
-            user.Authorization = response.headers.authorization;
-            user.RefreshToken = response.headers.refreshtoken;
-            return user;
-          } else {
-            console.error("로그인 중 오류 발생:");
-            return null;
-          }
-        } catch (error) {
-          console.error("로그인 중 오류 발생:", error);
-          return null;
-        }
-      },
-    }),
-  ],
+  providers: [defaultLoginProvider, socialLoginProvider],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, session, trigger }) {
       if (user) {
         token.Authorization = user.Authorization;
         token.RefreshToken = user.RefreshToken;
         console.log("토큰 콜백 =", token);
       }
 
-      // 토큰 만료 확인
+      if (trigger === "update") {
+        console.log("업데이트 토큰 콜백 =", token);
+        return token;
+      }
+
       const accessToken = token.Authorization?.replace("Bearer ", "");
       const decodedToken = jwt.decode(accessToken);
       if (decodedToken && decodedToken.exp <= Date.now() / 1000) {
         try {
-          // 재사용성을 높이는 방법을 생각해야 함 지금은 에러 때문에 임시로 사용
           const response = await axios.post(
             "http://localhost:8080/api/user/refresh-tokens",
             {},
@@ -69,7 +97,6 @@ const authOptions: NextAuthOptions = {
         } catch (error) {
           console.error("토큰 갱신 실패:", error);
           await signOut();
-          // 토큰 갱신 실패 시, 유효하지 않은 토큰을 반환하지 않도록 처리
           return {
             ...token,
             Authorization: null,
@@ -82,7 +109,6 @@ const authOptions: NextAuthOptions = {
 
     async session({ session, token }) {
       if (session) {
-        // session.user = session.user || {}; // session.user가 undefined인 경우 빈 객체로 초기화
         session.user.Authorization = token.Authorization;
         session.user.RefreshToken = token.RefreshToken;
         console.log("세션 콜백 =", session);
