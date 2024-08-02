@@ -19,6 +19,7 @@ const defaultLoginProvider = CredentialsProvider({
         password: credentials.password,
       });
       const user = response.data;
+      console.log("response.data유저정보를 확인합니다.", user);
       if (user) {
         user.Authorization = response.headers.authorization;
         user.RefreshToken = response.headers.refreshtoken;
@@ -48,8 +49,12 @@ const socialLoginProvider = CredentialsProvider({
       id: "exampleUserId",
       Authorization: credentials.accessToken,
       RefreshToken: credentials.refreshToken,
+      data: {
+        username: credentials.username,
+      },
     };
     if (user) {
+      console.log("소셜로그인 유저정보를 확인해봅시다.", user);
       return user;
     } else {
       console.error("소셜 로그인 중 오류 발생:");
@@ -63,6 +68,7 @@ const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user, session, trigger }) {
       if (user) {
+        token.username = user.data.username;
         token.Authorization = user.Authorization;
         token.RefreshToken = user.RefreshToken;
         console.log("토큰 콜백 =", token);
@@ -109,6 +115,7 @@ const authOptions: NextAuthOptions = {
 
     async session({ session, token }) {
       if (session) {
+        session.user.username = token.username;
         session.user.Authorization = token.Authorization;
         session.user.RefreshToken = token.RefreshToken;
         console.log("세션 콜백 =", session);

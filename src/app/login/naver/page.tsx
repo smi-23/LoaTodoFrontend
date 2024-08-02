@@ -29,11 +29,13 @@ const NaverCallback = () => {
           console.log(response.data);
           const accessToken = response.headers.authorization;
           const refreshToken = response.headers.refreshtoken;
+          const username = response.data.data.username;
 
           // NextAuth를 통해 로그인 => 세션 생성을 위함
           const result = await signIn("social-login", {
             accessToken,
             refreshToken,
+            username,
             redirect: false,
           });
           if (result?.ok) {

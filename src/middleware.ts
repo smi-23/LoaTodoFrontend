@@ -20,7 +20,8 @@ export async function middleware(request: NextRequest) {
     // 로그인하지 않은 유저가 보호된 페이지에 접근하려 할 때 리디렉션
     if (
       request.nextUrl.pathname.startsWith("/mypage") ||
-      request.nextUrl.pathname.startsWith("/dashboard")
+      request.nextUrl.pathname.startsWith("/dashboard") ||
+      request.nextUrl.pathname.startsWith("/board/write")
     ) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
@@ -37,6 +38,7 @@ export const config = {
     "/login",
     "/signup",
     "/mypage",
+    "/board/write",
     // "/about/:path*",
     // "/dashboard/:path*",
   ],

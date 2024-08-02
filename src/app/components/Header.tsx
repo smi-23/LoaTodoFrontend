@@ -21,8 +21,9 @@ import { useEffect, useState } from "react";
 import { Role } from "@/types";
 import * as React from "react";
 import SearchBox from "@/app/components/SearchBox";
+import { useRouter } from "next/navigation";
 
-const pages = ["Products", "Pricing", "Blog"];
+const pages = ["Products", "게시판", "Blog"];
 const settings = ["마이페이지", "로그아웃"];
 const loginSetting = ["로그인"];
 
@@ -33,6 +34,7 @@ const Header = () => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null,
   );
+  const router = useRouter();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -61,6 +63,15 @@ const Header = () => {
     }
   }, [token]);
 
+  const handlePageNavigation = (page: string) => {
+    handleCloseNavMenu();
+    if (page === "게시판") {
+      router.push("/board/list");
+    } else {
+      // 다른 페이지로 이동
+    }
+  };
+
   return (
     <header>
       <AppBar position="static">
@@ -71,7 +82,7 @@ const Header = () => {
               variant="h6"
               noWrap
               component="a"
-              href="#app-bar-with-responsive-menu"
+              href="/"
               sx={{
                 mr: 2,
                 display: { xs: "none", md: "flex" },
@@ -115,7 +126,10 @@ const Header = () => {
                 }}
               >
                 {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
+                  <MenuItem
+                    key={page}
+                    onClick={() => handlePageNavigation(page)}
+                  >
                     <Typography textAlign="center">{page}</Typography>
                   </MenuItem>
                 ))}
@@ -145,7 +159,7 @@ const Header = () => {
               {pages.map((page) => (
                 <Button
                   key={page}
-                  onClick={handleCloseNavMenu}
+                  onClick={() => handlePageNavigation(page)}
                   sx={{ my: 2, color: "red", display: "block" }}
                 >
                   {page}
@@ -165,8 +179,8 @@ const Header = () => {
                       alt="Remy Sharp"
                       src="/temp.webp"
                       width={40} // 이미지 너비 설정
-                      height={40}
-                    /> // 이미지 높이 설정 />
+                      height={40} // 이미지 높이 설정
+                    />
                   )}
                 </IconButton>
               </Tooltip>
